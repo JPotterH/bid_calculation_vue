@@ -2,13 +2,14 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-import VehicleFeesCard from '@/components/VehicleFeesCard.vue'
+import VehicleFeesCardComponent from '@/components/VehicleFeesCardComponent.vue'
 
 defineProps({
   vehicleTypes: Array,
 })
 
 const priceBid = ref(1)
+let bid = 0
 const selectedType = ref(1)
 const vehicleFees = ref({})
 let alertMessage = ''
@@ -18,13 +19,15 @@ function calculateBid(event) {
   alertMessage = '';
 
   axios
-  .get(`VehicleFee?bidOffer=${priceBid.value}&vehicleType=${selectedType.value}`)
+    .get(`VehicleFee?bidOffer=${priceBid.value}&vehicleType=${selectedType.value}`)
     .then(response => {
       vehicleFees.value = response.data
+      bid = priceBid.value
     })
     .catch((error) => {
       alertMessage = error.response.data
       vehicleFees.value = {}
+      bid = 0
     });
 }
 
@@ -35,7 +38,7 @@ function calculateBid(event) {
     <form class="form bid-form">
       <h3 style="margin-bottom: 0;">Bid Calculator</h3>
       <label>Bid amount:</label>
-      <input v-model="priceBid" type="number">
+      <input v-model="priceBid" type="number" min="1" step=".01">
       <label>Vehicle type:</label>
       <select v-model="selectedType">
         <option v-for="type in vehicleTypes" :value="type.id">
@@ -45,19 +48,20 @@ function calculateBid(event) {
       <p>{{ alertMessage }}</p>
       <button @click="calculateBid" class="btn-prm" type="submit">Calculate bid</button>
     </form>
-    <VehicleFeesCard :fees="vehicleFees"/>
+    <VehicleFeesCardComponent :fees="vehicleFees" :bidOffer="bid" />
   </div>
 </template>
 
 <style scoped>
-.bid-calculator{
+.bid-calculator {
   display: flex;
 }
 
-.bid-form{
+.bid-form {
   display: flex;
   flex-direction: column;
 }
+
 label {
   padding-top: 2rem;
 }

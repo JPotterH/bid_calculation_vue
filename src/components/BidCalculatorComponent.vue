@@ -15,21 +15,21 @@ function vehicleTypeEvaluator(vehicleT) {
 const getVehicleTypes = () => {
   axios
     .get('VehicleType')
-      .then(response => {
-        vehicleTypes.value = response.data
-      })
-      .catch(error => console.log(error)
-      );
+    .then(response => {
+      vehicleTypes.value = response.data
+    })
+    .catch(error => console.log(error)
+    );
 }
 
 const getVehicleList = () => {
   axios
     .get('Vehicle')
-      .then(response => {
-        vehiclesInfo.value = response.data
-      })
-      .catch(error => console.log(error)
-      );
+    .then(response => {
+      vehiclesInfo.value = response.data
+    })
+    .catch(error => console.log(error)
+    );
 }
 
 getVehicleTypes()
@@ -42,7 +42,9 @@ getVehicleList();
       <h2>Available vehicles</h2>
       <ul>
         <li v-bind:key="vehicle.id" v-for="vehicle in vehiclesInfo" class="list-item">
-          <span>{{ vehicle.description }}</span> <span><b>Base price:</b> ${{ vehicle.basePrice }}</span> <span><b>Type:</b> {{ vehicleTypeEvaluator(vehicle.type) }}</span>
+          <span>{{ vehicle.description }}</span>
+          <span><b>Base price:</b> ${{ vehicle.basePrice }}</span>
+          <span><b>Type:</b> {{ vehicleTypeEvaluator(vehicle.type) }}</span>
         </li>
       </ul>
     </div>
@@ -58,10 +60,10 @@ getVehicleList();
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  color: #888;
+  color: #bbb9b9;
 }
 
-.bid-calculator{
+.bid-calculator {
   display: flex;
   justify-content: space-around;
 }
