@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-import VehicleFeesCardComponent from '@/components/VehicleFeesCardComponent.vue'
+import VehicleFeesComponent from '@/components/VehicleFeesComponent.vue'
 
 defineProps({
   vehicleTypes: Array,
@@ -25,7 +25,7 @@ function calculateBid(event) {
       bid = priceBid.value
     })
     .catch((error) => {
-      alertMessage = error.response.data
+      alertMessage = error.response.data.title ? error.response.data.title : error.response.data
       vehicleFees.value = {}
       bid = 0
     });
@@ -48,13 +48,14 @@ function calculateBid(event) {
       <p>{{ alertMessage }}</p>
       <button @click="calculateBid" class="btn-prm" type="submit">Calculate bid</button>
     </form>
-    <VehicleFeesCardComponent :fees="vehicleFees" :bidOffer="bid" />
+    <VehicleFeesComponent :fees="vehicleFees" :bidOffer="bid" />
   </div>
 </template>
 
 <style scoped>
 .bid-calculator {
   display: flex;
+  column-gap: 60px;
 }
 
 .bid-form {
@@ -63,11 +64,11 @@ function calculateBid(event) {
 }
 
 label {
-  padding-top: 2rem;
+  padding-top: 24px;
 }
 
 select {
   padding: 2px;
-  margin-bottom: 2rem;
+  margin-bottom: 24px;
 }
 </style>
