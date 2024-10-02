@@ -7,15 +7,9 @@ const cancelTokenSources = [];
 export const vehicleTypeDataStore = defineStore("vehicleTypeData", {
   state: () => ({
     vehicleTypes: new Map(),
-    visits: 0,
   }),
   actions: {
     async getVehicleType(type = 0) {
-      this.visits++;
-      console.log(
-        `Visit ${this.visits} - vehicleTypes.size = ${this.vehicleTypes.size}`
-      );
-
       if (this.vehicleTypes.size === 0) {
         const source = axios.CancelToken.source();
         cancelTokenSources.push(source);
