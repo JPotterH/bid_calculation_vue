@@ -1,28 +1,11 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-
 import BidFormComponent from '@/components/BidFormComponent.vue'
-
-const vehicleTypes = ref([])
-
-const getVehicleTypes = () => {
-  axios
-    .get('VehicleType')
-    .then(response => {
-      vehicleTypes.value = response.data
-    })
-    .catch(error => console.log(error)
-    );
-}
-
-getVehicleTypes()
 </script>
 
 <template>
   <div class="calculator-container">
     <div class="bid-calculator">
-      <BidFormComponent :vehicleTypes="vehicleTypes" />
+      <BidFormComponent />
     </div>
   </div>
 </template>

@@ -1,18 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { vehicleTypeDataStore } from '@/store/vehicleTypeStore.js'
 
 import VehicleFeesComponent from '@/components/VehicleFeesComponent.vue'
 
-defineProps({
-  vehicleTypes: Array,
-})
-
+const vTypeDataStore = vehicleTypeDataStore();
+let vehicleTypes = ref(new Map())
 const priceBid = ref(1)
 let bid = 0
 const selectedType = ref(1)
 const vehicleFees = ref({})
 let alertMessage = ''
+
+onMounted(async () => {
+  vehicleTypes.value = await vTypeDataStore.getVehicleType();
+});
 
 function calculateBid(event) {
   event.preventDefault();
@@ -41,8 +44,8 @@ function calculateBid(event) {
       <input v-model="priceBid" type="number" min="1" step=".01">
       <label>Vehicle type:</label>
       <select v-model="selectedType">
-        <option v-for="type in vehicleTypes" :value="type.id">
-          {{ type.type }}
+        <option v-for="value in vehicleTypes" :key="value[0]" :value="value[0]">
+          {{ value[1] }}
         </option>
       </select>
       <p>{{ alertMessage }}</p>

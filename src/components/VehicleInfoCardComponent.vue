@@ -1,28 +1,21 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
+import { onMounted, reactive, toRefs } from 'vue';
+import { vehicleTypeDataStore } from '@/store/vehicleTypeStore.js'
 
-defineProps({
-  vehicleInfo: Object
+const props = defineProps({
+  vehicleInfo: {
+    type: Object,
+    required: true
+  }
 })
+const modifiedVehicleInfo = reactive({ ...props.vehicleInfo });
+const vTypeDataStore = vehicleTypeDataStore();
 
-const vehicleTypes = ref([])
+onMounted(async () => {
+  modifiedVehicleInfo.type = await vTypeDataStore.getVehicleType(props.vehicleInfo.type);
+});
 
-const getVehicleTypes = () => {
-  axios
-    .get('VehicleType')
-    .then(response => {
-      vehicleTypes.value = response.data
-    })
-    .catch(error => console.log(error)
-    );
-}
-
-function vehicleTypeEvaluator(vehicleT) {
-  return vehicleTypes.value.length > 0 ? vehicleTypes.value.find(vt => vt.id === vehicleT).type : vehicleT
-}
-
-getVehicleTypes()
+const { type  } = toRefs(modifiedVehicleInfo);
 </script>
 
 <template>
@@ -33,7 +26,7 @@ getVehicleTypes()
     <div class="card-info">
       <h3>{{ vehicleInfo.description }}</h3>
       <span><b>Base price:</b> ${{ vehicleInfo.basePrice }}</span>
-      <span><b>Type:</b> {{ vehicleTypeEvaluator(vehicleInfo.type) }}</span>
+      <span><b>Type:</b> {{ modifiedVehicleInfo.type }}</span>
     </div>
   </div>
 </template>
