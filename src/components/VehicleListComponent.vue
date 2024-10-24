@@ -1,27 +1,22 @@
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import { getVehicleList } from '@/services/vehicle_api';
 
 import VehicleInfoCardComponent from '@/components/VehicleInfoCardComponent.vue'
 
 const vehiclesInfo = ref([])
 
-const getVehicleList = () => {
-  axios
-    .get('Vehicle')
-    .then(response => {
-      vehiclesInfo.value = response.data
-    })
-    .catch(error => console.log(error)
-    );
+const listVehicles = async () => {
+  const data = await getVehicleList();
+  vehiclesInfo.value = data;
 }
 
-getVehicleList();
+listVehicles();
 </script>
 
 <template>
   <div class="vehicle-list-container">
-    <h2>Available vehicles</h2>
+    <h2 id="vehicle-list-heading">Available vehicles</h2>
     <div>
       <div class="vehicle-list">
         <div v-bind:key="vehicle.id" v-for="vehicle in vehiclesInfo" class="list-item">

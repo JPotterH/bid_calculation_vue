@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
+import { getVehicleBidFees } from "@/services/vehicle_api";
 import { vehicleTypeDataStore } from '@/store/vehicleTypeStore.js'
 
 import VehicleFeesComponent from '@/components/VehicleFeesComponent.vue'
@@ -8,7 +8,6 @@ import VehicleFeesComponent from '@/components/VehicleFeesComponent.vue'
 const vTypeDataStore = vehicleTypeDataStore();
 let vehicleTypes = ref(new Map())
 const priceBid = ref(1)
-let bid = 0
 const selectedType = ref(1)
 const vehicleFees = ref({})
 let alertMessage = ''
@@ -17,21 +16,12 @@ onMounted(async () => {
   vehicleTypes.value = await vTypeDataStore.getVehicleType();
 });
 
-function calculateBid(event) {
+async function calculateBid(event) {
   event.preventDefault();
-  alertMessage = '';
 
-  axios
-    .get(`VehicleFee?bidOffer=${priceBid.value}&vehicleType=${selectedType.value}`)
-    .then(response => {
-      vehicleFees.value = response.data
-      bid = priceBid.value
-    })
-    .catch((error) => {
-      alertMessage = error.response.data.title ? error.response.data.title : error.response.data
-      vehicleFees.value = {}
-      bid = 0
-    });
+  const { fees, message } = await getVehicleBidFees(priceBid.value, selectedType.value);
+  vehicleFees.value = fees;
+  alertMessage = message;
 }
 
 </script>
@@ -51,7 +41,7 @@ function calculateBid(event) {
       <p>{{ alertMessage }}</p>
       <button @click="calculateBid" class="btn-prm" type="submit">Calculate bid</button>
     </form>
-    <VehicleFeesComponent :fees="vehicleFees" :bidOffer="bid" />
+    <VehicleFeesComponent :fees="vehicleFees" />
   </div>
 </template>
 

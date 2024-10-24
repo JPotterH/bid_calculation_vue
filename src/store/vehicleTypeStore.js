@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
-
-const cancelTokenSources = [];
+import { getVehicleTypeList } from "@/services/vehicle_api";
 
 export const vehicleTypeDataStore = defineStore("vehicleTypeData", {
   state: () => ({
@@ -10,24 +8,10 @@ export const vehicleTypeDataStore = defineStore("vehicleTypeData", {
   actions: {
     async getVehicleType(type = 0) {
       if (this.vehicleTypes.size === 0) {
-        const source = axios.CancelToken.source();
-        cancelTokenSources.push(source);
-
-        await axios
-          .get("VehicleType", {
-            cancelToken: source.token,
-          })
-          .then((response) => {
-            cancelTokenSources.forEach((tokenSource) => {
-              if (tokenSource !== source) {
-                tokenSource.cancel("Request canceled");
-              }
-            });
-            response.data.forEach((vType) => {
-              this.vehicleTypes.set(vType.id, vType.type);
-            });
-          })
-          .catch((error) => console.log(error));
+        const vTypes = await getVehicleTypeList();
+        vTypes.forEach((vType) => {
+          this.vehicleTypes.set(vType.id, vType.type);
+        });
       }
 
       if (type === 0) return this.vehicleTypes;
