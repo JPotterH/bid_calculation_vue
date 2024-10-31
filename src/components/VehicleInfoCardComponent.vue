@@ -21,7 +21,7 @@ const { type  } = toRefs(modifiedVehicleInfo);
 <template>
   <div class="card">
     <div class="card-img">
-      <img src="@/assets/gray_car.png" alt="Car picture" width="240px">  
+      <img src="@/assets/gray_car.png" class="card-img" alt="Car picture">  
     </div>
     <div class="card-info">
       <h3>{{ vehicleInfo.description }}</h3>
@@ -34,6 +34,13 @@ const { type  } = toRefs(modifiedVehicleInfo);
 <style scoped>
 .card {
   padding: 0;
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
 }
 
 .card-info {

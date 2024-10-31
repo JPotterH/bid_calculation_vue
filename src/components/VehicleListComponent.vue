@@ -18,8 +18,8 @@ listVehicles();
   <div class="vehicle-list-container">
     <h2 id="vehicle-list-heading">Available vehicles</h2>
     <div>
-      <div class="vehicle-list">
-        <div v-bind:key="vehicle.id" v-for="vehicle in vehiclesInfo" class="list-item">
+      <div id="vehicle-list" class="vehicle-list">
+        <div :id="'vehicle_card_'+vehicle.id" v-bind:key="vehicle.id" v-for="vehicle in vehiclesInfo" class="vehicle-list-item">
           <VehicleInfoCardComponent :vehicleInfo="vehicle" />
         </div>
       </div>
@@ -34,13 +34,13 @@ listVehicles();
 
 .vehicle-list {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(280px, auto));
   padding: 12px;
 }
 
-.list-item {
-  max-width: 240px;
+.vehicle-list-item {
+  min-width: 220px;
   border: 2px solid rgba(189, 182, 182, 0.8);
-  margin: 12px;
+  margin: 12px auto;
 }
 </style>
