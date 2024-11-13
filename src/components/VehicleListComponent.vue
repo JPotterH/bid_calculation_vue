@@ -1,15 +1,16 @@
 <script setup>
-import { ref } from 'vue';
-import { getVehicleList } from '@/services/vehicle_api';
+import { ref } from "vue";
+import { getVehicleList } from "@/services/vehicle_api";
 
-import VehicleInfoCardComponent from '@/components/VehicleInfoCardComponent.vue'
+import VehicleInfoCardComponent from "@/components/VehicleInfoCardComponent.vue";
 
-const vehiclesInfo = ref([])
+const vehiclesInfo = ref([]);
 
 const listVehicles = async () => {
   const data = await getVehicleList();
+  console.info(data);
   vehiclesInfo.value = data;
-}
+};
 
 listVehicles();
 </script>
@@ -19,7 +20,12 @@ listVehicles();
     <h2 id="vehicle-list-heading">Available vehicles</h2>
     <div>
       <div id="vehicle-list" class="vehicle-list">
-        <div :id="'vehicle_card_'+vehicle.id" v-bind:key="vehicle.id" v-for="vehicle in vehiclesInfo" class="vehicle-list-item">
+        <div
+          :id="'vehicle_card_' + vehicle.id"
+          v-bind:key="vehicle.id"
+          v-for="vehicle in vehiclesInfo"
+          class="vehicle-list-item"
+        >
           <VehicleInfoCardComponent :vehicleInfo="vehicle" />
         </div>
       </div>
