@@ -8,7 +8,6 @@ const vehiclesInfo = ref([]);
 
 const listVehicles = async () => {
   const data = await getVehicleList();
-  console.info(data);
   vehiclesInfo.value = data;
 };
 

@@ -1,9 +1,10 @@
 import VehicleListComponent from "@/components/VehicleListComponent.vue";
 import { getVehicleList } from "@/services/vehicle_api";
-import { mount } from "@vue/test-utils";
+
+import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mount } from "@vue/test-utils";
 import waitFor from "wait-for-expect";
-import { createPinia, setActivePinia } from "pinia"; // Add this import
 
 vi.mock("@/services/vehicle_api", () => ({
   getVehicleList: vi.fn().mockImplementation(() => Promise.resolve([])),
@@ -15,6 +16,7 @@ describe("VehicleListComponent", () => {
     setActivePinia(createPinia());
     vi.clearAllMocks();
   });
+
   it("renders the user greeting", async () => {
     const wrapper = mount(VehicleListComponent);
     const mockVehicles = [
@@ -58,9 +60,7 @@ describe("VehicleListComponent", () => {
 
     getVehicleList.mockResolvedValue(mockVehicles);
     await waitFor(() => {
-      expect(wrapper.get("#vehicle-list-heading").text()).toBe(
-        "Available vehicles"
-      );
+      expect(wrapper.get("#vehicle-list-heading").text()).toBe("Available vehicles");
     });
   });
 
@@ -103,6 +103,7 @@ describe("VehicleListComponent", () => {
       //   type: 2,
       // },
     ];
+
     // Mount the component
     const wrapper = mount(VehicleListComponent, {
       global: {
@@ -134,15 +135,4 @@ describe("VehicleListComponent", () => {
       expect(item.attributes("id")).toBe(`vehicle_card_${vehicle.id}`);
     });
   });
-
-  // it("testing HomeView component props", async () => {
-  //   await wrapper.setProps({ title: "Guess User Age App" });
-  //   expect(wrapper.find('h1').text()).toBe('Hello World');
-
-  //   expect(HomeView.props.title).toContain("Guess User Age App");
-  // });
-
-  // it("Test if data is a function", () => {
-  //   expect(typeof HomeView.data).toBe("function");
-  // });
 });
