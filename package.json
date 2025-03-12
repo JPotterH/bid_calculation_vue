@@ -1,0 +1,32 @@
+{
+  "name": "bid-calculation-tool-vuejs",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest --dom",
+    "coverage": "vitest run --coverage",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "happy-dom": "^6.0.4",
+    "pinia": "^2.2.4",
+    "vue": "^3.4.37",
+    "vue-router": "^4.4.5"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitest/coverage-v8": "^2.1.1",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "vite": "^5.4.1",
+    "vitest": "^2.1.1",
+    "wait-for-expect": "^3.0.2"
+  }
+}
