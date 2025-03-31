@@ -53,9 +53,7 @@ export const getVehicleBidFees = async (priceBid, selectedType) => {
     .catch((error) => {
       return {
         fees: {},
-        message: error.response.data.title
-          ? error.response.data.title
-          : error.response.data,
+        message: error.response.data.title ? error.response.data.title : error.response.data,
       };
     });
 

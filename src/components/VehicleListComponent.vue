@@ -1,30 +1,24 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { getVehicleList } from "@/services/vehicle_api";
-
 import VehicleInfoCardComponent from "@/components/VehicleInfoCardComponent.vue";
 
 const vehiclesInfo = ref([]);
 
 const listVehicles = async () => {
-  const data = await getVehicleList();
-  vehiclesInfo.value = data;
+  vehiclesInfo.value = await getVehicleList();
 };
 
-listVehicles();
+onMounted(listVehicles);
 </script>
 
 <template>
   <div class="vehicle-list-container">
-    <h2 id="vehicle-list-heading">Available vehicles</h2>
+    <h2 id="vehicle-list-heading">{{ vehiclesInfo?.length > 0 ? 'Available' : 'No available' }} vehicles</h2>
     <div>
       <div id="vehicle-list" class="vehicle-list">
-        <div
-          :id="'vehicle_card_' + vehicle.id"
-          v-bind:key="vehicle.id"
-          v-for="vehicle in vehiclesInfo"
-          class="vehicle-list-item"
-        >
+        <div :id="'vehicle_card_' + vehicle.id" v-bind:key="vehicle.id" v-for="vehicle in vehiclesInfo"
+          class="vehicle-list-item">
           <VehicleInfoCardComponent :vehicleInfo="vehicle" />
         </div>
       </div>

@@ -15,18 +15,18 @@ onMounted(async () => {
   modifiedVehicleInfo.type = await vTypeDataStore.getVehicleType(props.vehicleInfo.type);
 });
 
-const { type  } = toRefs(modifiedVehicleInfo);
+const { type } = toRefs(modifiedVehicleInfo);
 </script>
 
 <template>
   <div class="card">
     <div class="card-img">
-      <img src="@/assets/gray_car.png" class="card-img" alt="Car picture">  
+      <img src="@/assets/gray_car.png" class="card-img" alt="Car picture">
     </div>
     <div class="card-info">
       <h3>{{ vehicleInfo.description }}</h3>
-      <span><b>Base price:</b> ${{ vehicleInfo.basePrice }}</span>
-      <span><b>Type:</b> {{ modifiedVehicleInfo.type }}</span>
+      <span class="card-info-price"><b>Base price:</b> ${{ vehicleInfo.basePrice }}</span>
+      <span class="card-info-type"><b>Type:</b> {{ modifiedVehicleInfo.type }}</span>
     </div>
   </div>
 </template>

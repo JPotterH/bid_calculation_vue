@@ -8,15 +8,10 @@ import waitFor from "wait-for-expect";
 
 vi.mock("@/services/vehicle_api", () => ({
   getVehicleList: vi.fn().mockImplementation(() => Promise.resolve([])),
-  // getVehicleTypeList: vi.fn().mockImplementation(() => Promise.resolve([])),
+  getVehicleTypeList: vi.fn().mockImplementation(() => Promise.resolve([])),
 }));
 
 describe("VehicleListComponent", () => {
-  beforeEach(() => {
-    setActivePinia(createPinia());
-    vi.clearAllMocks();
-  });
-
   const mockVehicles = [
     {
       id: 1,
@@ -50,16 +45,52 @@ describe("VehicleListComponent", () => {
     },
   ];
 
-  it("renders the user greeting", async () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+    vi.clearAllMocks();
+  });
+
+  it("renders 'No available vehicles' when API returns an empty list", async () => {
     const wrapper = mount(VehicleListComponent);
 
+    // Wait for the async request to resolve
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#vehicle-list-heading").text()).toBe("No available vehicles");
+    expect(wrapper.findAll(".vehicle-list-item").length).toBe(0);
+  });
+
+  it("renders 'Available vehicles' when API returns data", async () => {
     getVehicleList.mockResolvedValue(mockVehicles);
+
+    const wrapper = mount(VehicleListComponent);
+
+    await wrapper.vm.$nextTick();
+    await new Promise((r) => setTimeout(r, 0));
     await waitFor(() => {
       expect(wrapper.get("#vehicle-list-heading").text()).toBe("Available vehicles");
     });
   });
 
-  it("renders the list of vehicles", async () => {
+  it("renders list of vehicles correctly when API returns data", async () => {
+    getVehicleList.mockResolvedValue(mockVehicles);
+
+    const wrapper = mount(VehicleListComponent);
+    await wrapper.vm.$nextTick();
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(wrapper.find("#vehicle-list-heading").text()).toBe("Available vehicles");
+
+    const vehicleItems = wrapper.findAll(".vehicle-list-item");
+    mockVehicles.forEach((vehicle, index) => {
+      const item = vehicleItems[index];
+      expect(item.attributes("id")).toBe(`vehicle_card_${vehicle.id}`);
+    });
+
+    expect(vehicleItems.length).toBe(mockVehicles.length);
+  });
+
+  it("renders the correct number of VehicleInfoCardComponent components", async () => {
     const wrapper = mount(VehicleListComponent, {
       global: {
         stubs: {
@@ -78,13 +109,8 @@ describe("VehicleListComponent", () => {
     expect(getVehicleList).toHaveBeenCalled();
 
     // Get the rendered items
-    const vehicleItems = wrapper.findAll(".vehicle-list-item");
-
-    expect(vehicleItems.length).toBe(mockVehicles.length);
-
-    mockVehicles.forEach((vehicle, index) => {
-      const item = vehicleItems[index];
-      expect(item.attributes("id")).toBe(`vehicle_card_${vehicle.id}`);
-    });
+    expect(wrapper.findAllComponents({ name: "VehicleInfoCardComponent" }).length).toBe(
+      mockVehicles.length
+    );
   });
 });
