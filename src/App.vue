@@ -1,10 +1,8 @@
 <script setup>
 import AppContainerLayout from '@/layouts/AppContainerLayout.vue';
-import HeaderComponent from '@/components/HeaderComponent.vue'
 </script>
 
 <template>
-  <HeaderComponent />
   <main class="app-content">
     <AppContainerLayout>
       <RouterView />
